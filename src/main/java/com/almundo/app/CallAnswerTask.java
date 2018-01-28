@@ -42,7 +42,7 @@ public class CallAnswerTask implements Runnable {
 			Call task = dispatcher.answerCallByRole(role, time);
 			Thread.sleep(time);
 			if (task != null)
-				log.info("FIN LLAMADA => " + task);
+				log.info("END CALL => " + task);
 		} catch (InterruptedException ex) {
 			log.error(ex.getMessage());
 		}
