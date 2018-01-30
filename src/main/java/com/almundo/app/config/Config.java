@@ -10,6 +10,10 @@ public class Config {
 	
 	public static int TIME_MIN = 5000;
 	public static int TIME_MAX = 10000;
+	public static final Integer NUM_OPERATORS_TO_SIMULATE = 5;
+	public static final Integer NUM_SUPERVISORS_TO_SIMULATE = 2;
+	public static final Integer NUM_DIRECTORS_TO_SIMULATE = 1;
+	public static final Integer NUM_CALLS_TO_SIMULATE = 10;
 	
 	/**
 	 * This method generates a random value 

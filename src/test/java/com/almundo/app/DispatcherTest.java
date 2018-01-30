@@ -5,19 +5,18 @@ import org.junit.Test;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.almundo.app.config.Config;
+
 /**
  * The Class DispatcherTest.
  * 
  */
 public class DispatcherTest {
 
-	private static final Integer NUM_EMPLOYEES_TO_SIMULATE = 5;
-	private static final Integer NUM_SUPERVISORS_TO_SIMULATE = 2;
-	private static final Integer NUM_DIRECTORS_TO_SIMULATE = 1;
 	/** Logger */
 	private static final Logger log = LoggerFactory.getLogger(DispatcherTest.class);
 
-	Dispatcher dispatcher = new Dispatcher(NUM_EMPLOYEES_TO_SIMULATE, NUM_SUPERVISORS_TO_SIMULATE, NUM_DIRECTORS_TO_SIMULATE);	
+	Dispatcher dispatcher = new Dispatcher(Config.NUM_OPERATORS_TO_SIMULATE, Config.NUM_SUPERVISORS_TO_SIMULATE, Config.NUM_DIRECTORS_TO_SIMULATE);	
 	Call task1 = new Call(1);
 	Call task2 = new Call(2);
 	Call task3 = new Call(3);
@@ -35,22 +34,22 @@ public class DispatcherTest {
 	 * => the task should be assigned to that queue.
 	 */
 	@Test
-	public void dispatchTask2EmployeeQueue() {
-		log.info("STARTING => dispatchTask2EmployeeQueue TEST");
+	public void dispatchCall2OperatorQueue() {
+		log.info("STARTING => dispatchCall2OperatorQueue TEST");
 		// Empty queue to ensure size
 		dispatcher.getOperatorQueue().clear();
 		dispatcher.dispatchCall(task1);
 		Assert.assertEquals(1, dispatcher.getOperatorQueue().size());
-		log.info("ENDING => dispatchTask2EmployeeQueue TEST");
+		log.info("ENDING => dispatchCall2OperatorQueue TEST");
 	}
 
 	/**
 	 * In this case OPERATORS queue is full => next task should be assigned to SUPERVISORS queue
 	 */
 	@Test
-	public void dispatchTask2SupervisorQueue() {
+	public void dispatchCall2SupervisorQueue() {
 		// Empty queue to ensure size
-		log.info("STARTING => dispatchTask2SupervisorQueue TEST");
+		log.info("STARTING => dispatchCall2SupervisorQueue TEST");
 		dispatcher.getSupervisorQueue().clear();
 		dispatcher.dispatchCall(task1);
 		dispatcher.dispatchCall(task2);
@@ -60,7 +59,7 @@ public class DispatcherTest {
 		// All operators busy 
 		dispatcher.dispatchCall(task6);
 		Assert.assertEquals(1, dispatcher.getSupervisorQueue().size());
-		log.info("ENDING => dispatchTask2SupervisorQueue TEST");
+		log.info("ENDING => dispatchCall2SupervisorQueue TEST");
 	}
 
 	/**
@@ -68,8 +67,8 @@ public class DispatcherTest {
 	 * task should be assigned to DIRECTORS queue
 	 */
 	@Test
-	public void dispatchTask2DirectorQueue() {
-		log.info("STARTING => dispatchTask2DirectorQueue TEST");
+	public void dispatchCall2DirectorQueue() {
+		log.info("STARTING => dispatchCall2DirectorQueue TEST");
 		// Empty queues to ensure size
 		dispatcher.getOperatorQueue().clear();
 		dispatcher.getSupervisorQueue().clear();
@@ -86,7 +85,7 @@ public class DispatcherTest {
 		// All supervisors are busy
 		dispatcher.dispatchCall(task9);
 		Assert.assertEquals(1, dispatcher.getDirectorQueue().size());
-		log.info("ENDING => dispatchTask2DirectorQueue TEST");
+		log.info("ENDING => dispatchCall2DirectorQueue TEST");
 	}
 
 	/**
@@ -94,8 +93,8 @@ public class DispatcherTest {
 	 * case OPERATOR and if it's queue is empty it checks the ON HOLD queue (common queue)
 	 */
 	@Test
-	public void testGetByRoleEmployee() {
-		log.info("STARTING => testGetByRoleEmployee TEST");
+	public void testAnswerCallByRoleOperator() {
+		log.info("STARTING => testAnswerCallByRoleOperator TEST");
 		// Empty operators call queue.
 		dispatcher.getOperatorQueue().clear();
 		// Assign a call to operators queue
@@ -107,7 +106,7 @@ public class DispatcherTest {
 		Assert.assertEquals(1, dispatcher.getOperatorQueue().size());
 		dispatcher.answerCallByRole(role, time);
 		Assert.assertEquals(0, dispatcher.getOperatorQueue().size());
-		log.info("ENDING => testGetByRoleEmployee TEST");
+		log.info("ENDING => testAnswerCallByRoleOperator TEST");
 	}
 
 	/**
@@ -115,8 +114,8 @@ public class DispatcherTest {
 	 * case SUPERVISOR and if it's queue is empty it checks the ON HOLD queue (common queue)
 	 */
 	@Test
-	public void testGetByRoleSupervisor() {
-		log.info("STARTING => testGetByRoleSupervisor TEST");
+	public void testAnswerCallByRoleSupervisor() {
+		log.info("STARTING => testAnswerCallByRoleSupervisor TEST");
 		// Empty operators and supervisors queue
 		dispatcher.getOperatorQueue().clear();
 		dispatcher.getSupervisorQueue().clear();
@@ -135,7 +134,7 @@ public class DispatcherTest {
 		Assert.assertEquals(1, dispatcher.getSupervisorQueue().size());
 		dispatcher.answerCallByRole(role, time);
 		Assert.assertEquals(0, dispatcher.getSupervisorQueue().size());
-		log.info("ENDING => testGetByRoleSupervisor TEST");
+		log.info("ENDING => testAnswerCallByRoleSupervisor TEST");
 	}
 
 	/**
@@ -143,8 +142,8 @@ public class DispatcherTest {
 	 * case DIRECTOR and if it's queue is empty it checks the ON HOLD queue (common queue)
 	 */
 	@Test
-	public void testGetByRoleDirector() {
-		log.info("STARTING => testGetByRoleDirector TEST");
+	public void testAnswerCallByRoleDirector() {
+		log.info("STARTING => testAnswerCallByRoleDirector TEST");
 		// Empty all roles queues
 		dispatcher.getOperatorQueue().clear();
 		dispatcher.getSupervisorQueue().clear();
@@ -167,7 +166,7 @@ public class DispatcherTest {
 		Assert.assertEquals(1, dispatcher.getDirectorQueue().size());
 		dispatcher.answerCallByRole(role, time);
 		Assert.assertEquals(0, dispatcher.getDirectorQueue().size());
-		log.info("ENDING => testGetByRoleDirector TEST");
+		log.info("ENDING => testAnswerCallByRoleDirector TEST");
 	}
 
 }
